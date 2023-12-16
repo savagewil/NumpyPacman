@@ -3,6 +3,11 @@ import numpy as np
 from PacmanGame import PacmanGame
 from TileValues import TileValues
 
+WALL = 2
+UP = 3
+DOWN = 5
+LEFT = 7
+RIGHT = 11
 
 class PacmanGamePTUIRender():
     def __init__(self, game: PacmanGame):
@@ -11,9 +16,6 @@ class PacmanGamePTUIRender():
         self.wall_expander_short = np.zeros((self.size + 1, self.size + self.size + 1))
         for i in range(self.size + 1):
             self.wall_expander_short[i, 2 * i] = 1
-            # self.wall_expander_short[i, 2 * i + 2] = 1
-            # if i+1 < size - 1:
-            #     self.wall_expander[i+1, 2 * i + 1] = 1
         self.wall_expander_long = np.zeros((self.size, self.size + self.size + 1))
         for i in range(self.size):
             self.wall_expander_long[i, 2 * i + 1] = 1
@@ -78,13 +80,9 @@ def number_to_tile(v):
         return " └-"
     elif v == (7 * TileValues.VWALL.value + 5 * TileValues.HWALL.value):
         return "-┐ "
-    elif v == TileValues.VWALL.value:
+    elif v == TileValues.VWALL.value or v == 5 * TileValues.VWALL.value or v == 7 * TileValues.VWALL.value or v == 12 * TileValues.VWALL.value:
         return " | "
-    elif v == 5 * TileValues.VWALL.value:
-        return " | "
-    elif v == 7 * TileValues.VWALL.value:
-        return " | "
-    elif v == TileValues.HWALL.value:
+    elif v == TileValues.HWALL.value or v == 12 * TileValues.HWALL.value:
         return "---"
     elif v == 5 * TileValues.HWALL.value:
         return "-- "
