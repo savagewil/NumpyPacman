@@ -15,20 +15,20 @@ RIGHT = np.array([0, 1])
 
 class PacmanGameV2:
     def __init__(self, wall_count=5, pacmen=[], seed=None):
-        if seed is not None:
+        if seed is None:
             seed = int(np.random.random() * 1000)
             print(f"Seed:{seed}")
         np.random.seed(seed)
-        self.wall_count = wall_count * 2
+        self.wall_count = wall_count
         self.size = 3 * self.wall_count + 7
         self.walls = np.zeros((self.size, self.size))
-        self.pacmen = []
-        self.ghosts = []
+        self.pacman = [3, 3]
+        self.pacman_direction = 0
+        self.ghosts = [(self.size - 4, 3), (3, self.size - 4), (self.size - 4, self.size - 4)]
         self.dots = np.zeros((self.size, self.size))
         self.wall_chance = 1.0
 
-    def random_pacman(self):
-        global down_right
+    def random_pacman_grid(self):
         self.walls = np.zeros_like(self.walls)
 
         self.walls[0:1, :] = -1
@@ -46,9 +46,9 @@ class PacmanGameV2:
         self.walls[-4, 3:-4] = -1
         unmarked = []
         points = []
-        for wall_col in range(self.wall_count // 2):
+        for wall_col in range(self.wall_count // 2 + self.wall_count % 2):
             for wall_row in range(self.wall_count):
-            # points = list(range(self.wall_count))
+                # points = list(range(self.wall_count))
                 points.append((wall_row, wall_col))
         np.random.shuffle(points)
         for wall_row, wall_col in points:
@@ -79,18 +79,20 @@ class PacmanGameV2:
                          (up_right > 3 and up_left > 2))):
                     _directions.append(UP)
 
-                if ((wall_row != self.wall_count - 1 or wall_col < (self.wall_count//2 - 1)) and
+                if ((wall_row != self.wall_count - 1 or wall_col < (self.wall_count // 2 - 1)) and
                         ((wall_col < (self.wall_count // 2 - 1) and down_left > 2 and down_right > 2)
-                        or
+                         or
                          (down_left > 2 and down_right > 3))):
                     _directions.append(DOWN)
 
                 # if wall_col != 0 and \
 
-                if (wall_col < (self.wall_count // 2 - 1) and down_left > 2 and up_left > 2) or (down_left > 2 and up_left > 2):
+                if (wall_col < (self.wall_count // 2 - 1) and down_left > 2 and up_left > 2) or (
+                        down_left > 2 and up_left > 2):
                     _directions.append(LEFT)
 
-                if ((wall_col < self.wall_count // 2- 1) and down_right > 2 and up_right > 2) or (down_right > 3 and up_right > 3):
+                if ((wall_col < self.wall_count // 2 - 1) and down_right > 2 and up_right > 2) or (
+                        down_right > 3 and up_right > 3):
                     _directions.append(RIGHT)
 
                 if _directions:
@@ -125,6 +127,12 @@ class PacmanGameV2:
                     direction = RIGHT
                     self.walls[min(row, row + direction[0]):max(row + 2, row + 2 + direction[0]),
                     min(col, col + direction[1]):max(col + 2, col + 2 + direction[1])] = 1
+        self.walls[:, self.size - self.size // 2:] = np.fliplr(self.walls[:, :self.size // 2])
 
-    def fill_walls(self):
-        self.walls = np.ones_like(self.walls)
+    def fill_dots(self):
+        self.dots = np.zeros_like(self.walls) + self.walls < 1
+
+        self.dots[0:1, :] = 0
+        self.dots[:, 0:1] = 0
+        self.dots[-1:, :] = 0
+        self.dots[:, -1:] = 0

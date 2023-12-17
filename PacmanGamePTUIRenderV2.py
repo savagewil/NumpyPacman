@@ -55,8 +55,21 @@ def number_to_tile(v):
         return "-┬-"
     elif v == 11:
         return "-┤ "
-    if v == 12:
+    elif v == 12:
         return "-┼-"
+    elif v == 13:
+        return " ᗧ "
+    elif v == 14:
+        return " ᗤ "
+    elif v == 15:
+        return " ᗣ "
+    elif v == 16:
+        return " ᗢ "
+    elif v == 17:
+        return " ᗝ "
+    elif v == 18:
+        return " • "
+
     # elif v == 5 * TileValues.HWALL.value:
     #     return "-- "
     # elif v == 7 * TileValues.HWALL.value:
@@ -129,6 +142,13 @@ class PacmanGamePTUIRenderV2():
         drawing = drawing + (drawing == 0) * inverse_corners
         drawing = drawing + (drawing == 0) * edges
 
+        print(self.game.dots)
+        drawing = drawing + (drawing == 0) * self.game.dots * 18
+
+        drawing[game.pacman[0], game.pacman[1]] = 13 + self.game.pacman_direction
+        for ghost in game.ghosts:
+            drawing[ghost[0], ghost[1]] = 17
+
         # drawing[1:-1, 0] = 7
         # drawing[1:-1, -1] = 7
         # drawing[0, 1:-1] = 6
@@ -144,9 +164,12 @@ class PacmanGamePTUIRenderV2():
                           for row in self.game.walls]) + "\n"
 
 
+
 if __name__ == '__main__':
     # np.random.seed(300)
-    game = PacmanGameV2(3)
-    game.random_pacman()
+    # 909 9
+    game = PacmanGameV2(9)
+    game.random_pacman_grid()
+    game.fill_dots()
     renderer = PacmanGamePTUIRenderV2(game)
     print(renderer)
