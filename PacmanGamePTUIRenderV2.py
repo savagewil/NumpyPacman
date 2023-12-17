@@ -66,16 +66,11 @@ def number_to_tile(v):
     elif v == 16:
         return " ᗢ "
     elif v == 17:
-        return " ᗝ "
+        return " Ⴖ "
     elif v == 18:
         return " • "
-
-    # elif v == 5 * TileValues.HWALL.value:
-    #     return "-- "
-    # elif v == 7 * TileValues.HWALL.value:
-    #     return " --"
-    # elif v == TileValues.DOT.value:
-    #     return " o "
+    elif v == 19:
+        return " ◉ "
     else:
         return "   "
 
@@ -98,11 +93,6 @@ class PacmanGamePTUIRenderV2():
             self.left_matrix[i, i + 1] = 1
 
     def __str__(self):
-        # dots_expanded = self.cell_expander.transpose().dot(self.dots).dot(self.cell_expander)
-        # print(self.game.walls, self.game.walls.shape)
-        # walls = np.pad(self.game.walls, pad_width=1, mode='constant', constant_values=1)
-
-        # print(self.game.walls.astype(int))
         drawing = np.zeros_like(self.game.walls)
 
         xs = (correlation.correlate(self.game.walls, x_kernel, 7) * 12 +
@@ -132,29 +122,21 @@ class PacmanGamePTUIRenderV2():
                   correlation.correlate(self.game.walls, np.fliplr(edge_kernel), 2)) > 0) * 6 +
                 ((correlation.correlate(self.game.walls, np.rot90(edge_kernel), 2) +
                   correlation.correlate(self.game.walls, np.flipud(np.rot90(edge_kernel)), 2)) > 0) * 7)
-        # print("edges")
-        # print(correlation.correlate(self.game.walls, edge_kernel, 2))
-        # print("")
-        # print(correlation.correlate(self.game.walls, np.fliplr(edge_kernel), 2))
+
         drawing = drawing + (drawing == 0) * xs
         drawing = drawing + (drawing == 0) * ts
         drawing = drawing + (drawing == 0) * corners
         drawing = drawing + (drawing == 0) * inverse_corners
         drawing = drawing + (drawing == 0) * edges
 
-        print(self.game.dots)
         drawing = drawing + (drawing == 0) * self.game.dots * 18
+
+        for dot in game.big_dots:
+            drawing[dot[0], dot[1]] = 19
 
         drawing[game.pacman[0], game.pacman[1]] = 13 + self.game.pacman_direction
         for ghost in game.ghosts:
             drawing[ghost[0], ghost[1]] = 17
-
-        # drawing[1:-1, 0] = 7
-        # drawing[1:-1, -1] = 7
-        # drawing[0, 1:-1] = 6
-        # drawing[-1, 1:-1] = 6
-        # print(drawing)
-        # print(self.game.walls)
 
         return "\n".join(["".join([number_to_tile(v) for v in row])
                           for row in drawing]) + "\n"
@@ -164,11 +146,9 @@ class PacmanGamePTUIRenderV2():
                           for row in self.game.walls]) + "\n"
 
 
-
 if __name__ == '__main__':
-    # np.random.seed(300)
-    # 909 9
-    game = PacmanGameV2(9)
+    # 909 9, 502
+    game = PacmanGameV2(7)
     game.random_pacman_grid()
     game.fill_dots()
     renderer = PacmanGamePTUIRenderV2(game)

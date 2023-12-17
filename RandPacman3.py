@@ -20,7 +20,6 @@ LEFT = np.array([0, -1])
 RIGHT = np.array([0, 1])
 
 if __name__ == '__main__':
-    # np.random.seed(155)
     wall_count = 8
     game = PacmanGameV2(2 * wall_count + wall_count + 7)
     render = PacmanGamePTUIRenderV2(game)
@@ -65,9 +64,6 @@ if __name__ == '__main__':
                 up_right += game.walls[row - 1 + direction[0], col + 2 + direction[1]] != 1
 
 
-            print(f"({wall_row},{wall_col})")
-            print(f"up_left:{up_left} down_left:{down_left} down_right:{down_right} up_right:{up_right}")
-
             if wall_row != 0 and up_right > 2 and up_left > 2:
                 _directions.append(UP)
 
@@ -91,6 +87,5 @@ if __name__ == '__main__':
 
     game.walls[:, 1 + game.size // 2:] = np.fliplr(game.walls[:, :game.size // 2])
     game.walls = game.walls + -1 * (game.walls == 0)
-    # game.walls = game.walls > 0
     print(render)
     print(render.block())

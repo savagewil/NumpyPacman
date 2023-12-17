@@ -13,7 +13,6 @@ def correlate(base: object, kernel: object, expected: object=None) -> np.ndarray
         transform_up[i - 1, i] = 1
 
     filter_matrixes = [np.zeros((base.shape[1], base.shape[1])) for _ in range(kernel.shape[1])]
-    # print(len(filter_matrixes))
 
     correlation = np.zeros_like(base)
     for idx, filter_matrix in enumerate(filter_matrixes):
@@ -23,9 +22,6 @@ def correlate(base: object, kernel: object, expected: object=None) -> np.ndarray
             i] = kernel[
                  max(0, (kernel.shape[0] // 2) - i): min(kernel.shape[0], base.shape[1] - i + kernel.shape[0] // 2),
                  idx]
-            # print(filter_matrix)
-        # print()
-        # print(filter_matrix)
         base_shifted = base
         if idx < kernel.shape[1] // 2:
             for i in range((kernel.shape[1] // 2) - idx):
@@ -33,11 +29,8 @@ def correlate(base: object, kernel: object, expected: object=None) -> np.ndarray
         else:
             for i in range(idx - (kernel.shape[1] // 2)):
                 base_shifted = transform_up.dot(base_shifted)
-        # print(base_shifted.dot(filter_matrix))
         correlation = correlation + base_shifted.dot(filter_matrix)
-    # print()
-    # print(correlation)
-    # print(1 * (correlation == expected))
+
     return 1 * (correlation == expected)
 
 
@@ -59,13 +52,8 @@ if __name__ == '__main__':
     base[3, 2] = 1
     base[3, 3] = 1
     base[2, 3] = 1
-    print(base)
     kernel = np.array([[1, 1, 0],
                        [1, 0, 0],
                        [0, 0, 0]])
 
     expected_value = 3
-    print(kernel)
-    print()
-
-    print(correlate_rotated(base, kernel, expected_value))

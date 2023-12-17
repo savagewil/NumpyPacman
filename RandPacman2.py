@@ -98,15 +98,11 @@ def fill_walls(game):
 
 def fill_deads(game):
     new_paths = (correlate_rotated(game.walls, dead_kernel, 6))
-    print("deads")
-    print(new_paths)
+
     game.walls = game.walls * (1 - new_paths) - new_paths
 
 
 def fill_paths(game):
-    # new_paths = (correlate_rotated(game.walls, dead_kernel, 4))
-    #
-    # game.walls = game.walls * (1 - new_paths) - new_paths
 
     new_paths = (correlate_rotated(game.walls, trapped_kernel, 5))
     game.walls = game.walls * (1 - new_paths) - new_paths
@@ -121,7 +117,6 @@ def fill_paths(game):
 
 
 if __name__ == '__main__':
-    # np.random.seed(155)
     game = PacmanGameV2(20)
     render = PacmanGamePTUIRenderV2(game)
     game.walls = np.zeros_like(game.walls)
@@ -177,6 +172,5 @@ if __name__ == '__main__':
 
     game.walls[:, game.size // 2:] = np.fliplr(game.walls[:, :game.size // 2])
     game.walls = game.walls + -1 * (game.walls == 0)
-    # game.walls = game.walls > 0
     print(render)
     print(render.block())

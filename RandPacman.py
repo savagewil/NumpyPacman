@@ -63,23 +63,11 @@ if __name__ == '__main__':
             continue
         else:
             print("else")
-            game.walls[row, col] = -1  # np.random.choice([1, -1])
+            game.walls[row, col] = -1
             for point in new_points:
                 if not point in points:
                     points.append(point)
-        # input("test")
 
-    # for row, col in points:
-    #     path_count = 0
-    #     corner_path_count = 0
-    #     wall_count = 0
-    #     for i in [-1, 0, 1]:
-    #         for j in [-1, 0, 1]:
-    #             wall_count += game.walls[row + i, col + j] == 1
-    #             path_count += game.walls[row + i, col + j] == -1
-    #             corner_path_count += (i != 0 and j != 0) and game.walls[row + i, col + j] == -1
-    #     if corner_path_count > 1 and path_count > 3:
-    #         game.walls[row, col] = 1
     for col in range(2, game.size // 2):
         for row in range(2, game.size - 2):
             if game.walls[row, col] == -1:
