@@ -146,7 +146,7 @@ class PacmanGamePTUIRenderV2():
 
 if __name__ == '__main__':
     # np.random.seed(300)
-    game = PacmanGameV2(7)
+    game = PacmanGameV2(3)
     game.random_pacman()
     renderer = PacmanGamePTUIRenderV2(game)
     print(renderer)
