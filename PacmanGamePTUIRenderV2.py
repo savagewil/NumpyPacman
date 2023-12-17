@@ -89,7 +89,7 @@ class PacmanGamePTUIRenderV2():
         # print(self.game.walls, self.game.walls.shape)
         # walls = np.pad(self.game.walls, pad_width=1, mode='constant', constant_values=1)
 
-        print(self.game.walls.astype(int))
+        # print(self.game.walls.astype(int))
         drawing = np.zeros_like(self.game.walls)
 
         xs = (correlation.correlate(self.game.walls, x_kernel, 7) * 12 +
@@ -119,10 +119,10 @@ class PacmanGamePTUIRenderV2():
                   correlation.correlate(self.game.walls, np.fliplr(edge_kernel), 2)) > 0) * 6 +
                 ((correlation.correlate(self.game.walls, np.rot90(edge_kernel), 2) +
                   correlation.correlate(self.game.walls, np.flipud(np.rot90(edge_kernel)), 2)) > 0) * 7)
-        print("edges")
-        print(correlation.correlate(self.game.walls, edge_kernel, 2))
-        print("")
-        print(correlation.correlate(self.game.walls, np.fliplr(edge_kernel), 2))
+        # print("edges")
+        # print(correlation.correlate(self.game.walls, edge_kernel, 2))
+        # print("")
+        # print(correlation.correlate(self.game.walls, np.fliplr(edge_kernel), 2))
         drawing = drawing + (drawing == 0) * xs
         drawing = drawing + (drawing == 0) * ts
         drawing = drawing + (drawing == 0) * corners
@@ -133,8 +133,8 @@ class PacmanGamePTUIRenderV2():
         # drawing[1:-1, -1] = 7
         # drawing[0, 1:-1] = 6
         # drawing[-1, 1:-1] = 6
-        print(drawing)
-        print(self.game.walls)
+        # print(drawing)
+        # print(self.game.walls)
 
         return "\n".join(["".join([number_to_tile(v) for v in row])
                           for row in drawing]) + "\n"
@@ -146,7 +146,7 @@ class PacmanGamePTUIRenderV2():
 
 if __name__ == '__main__':
     # np.random.seed(300)
-    game = PacmanGameV2(6)
+    game = PacmanGameV2(7)
     game.random_pacman()
     renderer = PacmanGamePTUIRenderV2(game)
     print(renderer)

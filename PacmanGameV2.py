@@ -17,8 +17,8 @@ class PacmanGameV2:
     def __init__(self, wall_count=5, pacmen=[], seed=None):
         if seed is not None:
             np.random.seed(seed)
-        self.wall_count = wall_count
-        self.size = 2 * wall_count + wall_count + 7
+        self.wall_count = wall_count * 2
+        self.size = 3 * self.wall_count + 7
         self.walls = np.zeros((self.size, self.size))
         self.pacmen = []
         self.ghosts = []
@@ -35,7 +35,7 @@ class PacmanGameV2:
         self.walls[1:3, 1:-2] = 1
         self.walls[1:-2, 1:3] = 1
         self.walls[-3:-1, 1:-2] = 1
-        self.walls[1:-2, (self.size // 2) + 1] = 1
+        self.walls[1:-2, (self.size // 2) + 1:] = 1
 
         self.walls[3, 3:-4] = -1
         self.walls[3:-4, 3] = -1
@@ -65,20 +65,25 @@ class PacmanGameV2:
                     down_right += self.walls[row + 2 + direction[0], col + 2 + direction[1]] != 1
                     up_right += self.walls[row - 1 + direction[0], col + 2 + direction[1]] != 1
 
-                print(f"({wall_row},{wall_col})")
-                print(f"up_left:{up_left} down_left:{down_left} down_right:{down_right} up_right:{up_right}")
+                # print(f"({wall_row},{wall_col})")
+                # print(f"up_left:{up_left} down_left:{down_left} down_right:{down_right} up_right:{up_right}")
 
-                if wall_row != 0 and up_right > 2 and up_left > 2:
+                # if wall_row != 0 and \
+                if up_right > 2 and up_left > 2:
                     _directions.append(UP)
 
-                if wall_row != self.wall_chance - 1 and down_left > 2 and down_right > 2:
+                # if wall_row != self.wall_count - 1 and\
+                if down_left > 2 and down_right > 2:
                     _directions.append(DOWN)
 
-                if wall_col != 0 and down_left > 2 and up_left > 2:
+                # if wall_col != 0 and \
+
+                if down_left > 2 and up_left > 2:
                     _directions.append(LEFT)
 
                 if down_right > 2 and up_right > 2:
                     _directions.append(RIGHT)
+
                 if _directions:
                     direction = _directions[np.random.randint(0, len(_directions))]
                 else:
