@@ -129,10 +129,10 @@ class PacmanGamePTUIRenderV2():
         drawing = drawing + (drawing == 0) * inverse_corners
         drawing = drawing + (drawing == 0) * edges
 
-        drawing[1:-1, 0] = 7
-        drawing[1:-1, -1] = 7
-        drawing[0, 1:-1] = 6
-        drawing[-1, 1:-1] = 6
+        # drawing[1:-1, 0] = 7
+        # drawing[1:-1, -1] = 7
+        # drawing[0, 1:-1] = 6
+        # drawing[-1, 1:-1] = 6
         print(drawing)
         print(self.game.walls)
 
@@ -146,7 +146,7 @@ class PacmanGamePTUIRenderV2():
 
 if __name__ == '__main__':
     # np.random.seed(300)
-    game = PacmanGameV2(26)
+    game = PacmanGameV2(6)
     game.random_pacman()
     renderer = PacmanGamePTUIRenderV2(game)
     print(renderer)
