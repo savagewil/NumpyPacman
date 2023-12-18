@@ -87,5 +87,5 @@ if __name__ == '__main__':
 
     game.walls[:, 1 + game.size // 2:] = np.fliplr(game.walls[:, :game.size // 2])
     game.walls = game.walls + -1 * (game.walls == 0)
-    print(render)
-    print(render.block())
+    # print(render)
+    # print(render.block())

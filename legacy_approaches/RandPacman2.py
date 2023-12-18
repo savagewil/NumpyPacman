@@ -106,11 +106,11 @@ def fill_paths(game):
 
     new_paths = (correlate_rotated(game.walls, trapped_kernel, 5))
     game.walls = game.walls * (1 - new_paths) - new_paths
-    print("break walls")
-    print(game.walls)
+    # print("break walls")
+    # print(game.walls)
     new_paths = (correlate_rotated(game.walls, long_wall_kernel, 9))
-    print(new_paths)
-    print()
+    # print(new_paths)
+    # print()
     game.walls = game.walls * (1 - new_paths) - new_paths
 
     fill_deads(game)
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     for row in range(2, game.size - 2):
         if not (row, 2) in points:
             points.append((row, 2))
-    print(points)
+    # print(points)
 
     fill_walls(game)
     fill_paths(game)
@@ -154,23 +154,23 @@ if __name__ == '__main__':
 
     for i in range(5):
         new_walls = ((correlate_rotated(game.walls, wall_filler_kernel)) + (correlate_rotated(game.walls, wall_filler2_kernel))) > 0
-        print("filling")
-        print(new_walls)
+        # print("filling")
+        # print(new_walls)
         game.walls = game.walls * (1 - new_walls) + new_walls
 
 
         new_walls = (correlate_rotated(game.walls, dead_kernel2))
-        print("filling")
-        print(new_walls)
+        # print("filling")
+        # print(new_walls)
         game.walls = game.walls * (1 - new_walls) + new_walls
 
 
     new_walls = (correlate_rotated(game.walls,wall_trimmer_kernel )) > 0
-    print("trimming")
-    print(new_walls)
+    # print("trimming")
+    # print(new_walls)
     game.walls = game.walls * (1 - new_walls) - new_walls
 
     game.walls[:, game.size // 2:] = np.fliplr(game.walls[:, :game.size // 2])
     game.walls = game.walls + -1 * (game.walls == 0)
-    print(render)
-    print(render.block())
+    # print(render)
+    # print(render.block())

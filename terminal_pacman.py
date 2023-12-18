@@ -14,7 +14,7 @@ def end(window, renderer, game):
         window.addstr(0, 0, renderer.__str__())
         window.addstr(game.size // 2 - 3, 3 * game.size // 2 - 11, f"                       ")
         window.addstr(game.size // 2 - 2, 3 * game.size // 2 - 11, f"  ┌-----------------┐  ")
-        window.addstr(game.size // 2 - 1, 3 * game.size // 2 - 11, f"  |     Game over   |  ")
+        window.addstr(game.size // 2 - 1, 3 * game.size // 2 - 11, f"  |    Game over    |  ")
         window.addstr(game.size // 2, 3 * game.size // 2 - 11, f"  | Final Score:{str(game.score).zfill(3)} |  ")
         window.addstr(game.size // 2 + 1, 3 * game.size // 2 - 11, f"  | Press x to exit |  ")
         window.addstr(game.size // 2 + 2, 3 * game.size // 2 - 11, f"  └-----------------┘  ")
@@ -81,7 +81,7 @@ def pause(window, renderer, game):
 
 def main(window):
     # curses.cbreak()
-    tick_per_second = 100
+    tick_per_second = 25
     window.nodelay(True)
 
     game = PacmanGameV2(9)

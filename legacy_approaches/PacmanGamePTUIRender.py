@@ -33,24 +33,24 @@ class PacmanGamePTUIRender():
         h_wall_expanded = ((self.wall_expander_short.transpose()).dot(h_walls).dot(
             self.wall_expander_long))
 
-        print(self.wall_expander_short.transpose(),self.wall_expander_short.transpose().shape)
-        print()
-        print(self.wall_expander_long, self.wall_expander_long.shape)
-        print()
-
-        print(h_walls, h_walls.shape)
-        print()
-
-        print(h_wall_expanded)
-        print()
-        print(TileValues.HWALL.value * h_wall_expanded)
+        # print(self.wall_expander_short.transpose(),self.wall_expander_short.transpose().shape)
+        # print()
+        # print(self.wall_expander_long, self.wall_expander_long.shape)
+        # print()
+        #
+        # print(h_walls, h_walls.shape)
+        # print()
+        #
+        # print(h_wall_expanded)
+        # print()
+        # print(TileValues.HWALL.value * h_wall_expanded)
 
         v_walls = np.concatenate([np.ones((self.size, 1)), self.game.v_walls, np.ones((self.size, 1))], axis=1)
         v_wall_expanded = (self.wall_expander_long.transpose().dot(v_walls)).dot(self.wall_expander_short)
         expanded = (TileValues.VWALL.value * v_wall_expanded) + (TileValues.HWALL.value * h_wall_expanded)
-        print(v_wall_expanded)
-        print()
-        print(expanded)
+        # print(v_wall_expanded)
+        # print()
+        # print(expanded)
         return ("\n").join(["".join(map(number_to_tile, row)) for row in expanded]) + "\n"
 
 
@@ -92,4 +92,4 @@ if __name__ == '__main__':
     game = PacmanGame(10)
     game.random_walls()
     renderer = PacmanGamePTUIRender(game)
-    print(renderer)
+    # print(renderer)
