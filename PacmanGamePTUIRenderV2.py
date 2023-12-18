@@ -1,3 +1,6 @@
+import time
+from curses import wrapper
+
 import correlation
 from PacmanGameV2 import PacmanGameV2
 
@@ -131,14 +134,14 @@ class PacmanGamePTUIRenderV2():
 
         drawing = drawing + (drawing == 0) * self.game.dots * 18
 
-        for dot in game.big_dots:
+        for dot in self.game.big_dots:
             drawing[dot[0], dot[1]] = 19
 
-        drawing[game.pacman[0], game.pacman[1]] = 13 + self.game.pacman_direction
-        for ghost in game.ghosts:
+        drawing[self.game.pacman[0], self.game.pacman[1]] = 13
+        for ghost in self.game.ghosts:
             drawing[ghost[0], ghost[1]] = 17
 
-        return "\n".join(["".join([number_to_tile(v) for v in row])
+        return f"Score: {self.game.score}\n" + "\n".join(["".join([number_to_tile(v) for v in row])
                           for row in drawing]) + "\n"
 
     def block(self):
@@ -146,10 +149,26 @@ class PacmanGamePTUIRenderV2():
                           for row in self.game.walls]) + "\n"
 
 
-if __name__ == '__main__':
-    # 909 9, 502
+# if __name__ == '__main__':
+#     # 909 9, 502
+#     game = PacmanGameV2(7)
+#     game.random_pacman_grid()
+#     game.fill_dots()
+#     renderer = PacmanGamePTUIRenderV2(game)
+#     print(renderer)
+
+def main(window):
+    window.clear()
     game = PacmanGameV2(7)
     game.random_pacman_grid()
-    game.fill_dots()
     renderer = PacmanGamePTUIRenderV2(game)
-    print(renderer)
+    str_ = renderer.__str__()
+    for i in range(20):
+        window.addstr(0, 0, str_)
+        window.refresh()
+        time.sleep(1)
+    # This raises ZeroDivisionError when i == 10.
+
+
+if __name__ == '__main__':
+    wrapper(main)
