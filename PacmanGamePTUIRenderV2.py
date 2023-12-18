@@ -61,19 +61,28 @@ def number_to_tile(v):
     elif v == 12:
         return "-┼-"
     elif v == 13:
+        return " ᗢ "
+    elif v == 16:
         return " ᗧ "
     elif v == 14:
         return " ᗤ "
     elif v == 15:
         return " ᗣ "
-    elif v == 16:
-        return " ᗢ "
     elif v == 17:
         return " Ⴖ "
     elif v == 18:
         return " • "
     elif v == 19:
         return " ◉ "
+    elif v == 20:
+        return " ᗤ "
+    elif v == 21:
+        return " D "
+    elif v == 22:
+        return " < "
+    elif v == 23:
+        return " • "
+
     else:
         return "   "
 
@@ -137,11 +146,12 @@ class PacmanGamePTUIRenderV2():
         for dot in self.game.big_dots:
             drawing[dot[0], dot[1]] = 19
 
-        drawing[self.game.pacman[0], self.game.pacman[1]] = 13
         for ghost in self.game.ghosts:
             drawing[ghost[0], ghost[1]] = 17
 
-        return f"Score: {self.game.score}\n" + "\n".join(["".join([number_to_tile(v) for v in row])
+        drawing[self.game.pacman[0], self.game.pacman[1]] = 13 + self.game.pacman_direction_num
+        Score_str = f"Score: {self.game.score} Lives:{ (self.game.lives - 1) *' ᗧ' }"
+        return " " * (3*(self.game.size // 2) - (len(Score_str)//2)) + Score_str+ "\n".join(["".join([number_to_tile(v) for v in row])
                           for row in drawing]) + "\n"
 
     def block(self):

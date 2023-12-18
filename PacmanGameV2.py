@@ -25,6 +25,7 @@ class PacmanGameV2:
         np.random.seed(seed)
         self.wall_count = wall_count
         self.score = 0
+        self.lives = 3
         self.pacman_speed = 10
         self.ghost_speed = 8
         self.size = 3 * self.wall_count + 7
@@ -32,6 +33,7 @@ class PacmanGameV2:
         self.pacman = np.array([3, 3])
         self.pacman_direction = STILL
         self.pacman_direction_num = 0
+        self.pacman_spawn = self.pacman
         self.ghosts = [np.array([self.size - 4, 3]),
                        np.array([3, self.size - 4]),
                        np.array([self.size - 4, self.size - 4]),
@@ -210,7 +212,19 @@ class PacmanGameV2:
         self.score += self.dots[self.pacman[0], self.pacman[1]]
         self.dots[self.pacman[0], self.pacman[1]] = 0
 
-    def spawn_pacman(self):
-        dots = np.where(self.dots[self.size // 4:self.size - self.size // 4,
-                        self.size // 4:self.size - self.size // 4])
-        self.pacman = np.array(list(zip(dots[0], dots[1]))[np.random.randint(0, len(dots[0]))]) + self.size // 4
+    def spawn_pacman(self, fresh=False):
+        if fresh:
+            dots = np.where(self.dots[self.size // 4:self.size - self.size // 4,
+                            self.size // 4:self.size - self.size // 4])
+            self.pacman_spawn = np.array(list(zip(dots[0], dots[1]))[np.random.randint(0, len(dots[0]))]) + self.size // 4
+
+        self.pacman = self.pacman_spawn
+        self.pacman_direction = STILL
+        self.pacman_direction_num = 0
+
+    def spawn_ghosts(self):
+        self.ghosts = [np.array([self.size - 4, 3]),
+                       np.array([3, self.size - 4]),
+                       np.array([self.size - 4, self.size - 4]),
+                       np.array([3, 3])]
+        self.ghost_directions: List[np.ndarray] = [STILL, STILL, STILL, STILL]
