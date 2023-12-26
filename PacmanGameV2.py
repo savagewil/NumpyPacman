@@ -17,6 +17,7 @@ RIGHT = np.array([0, 1])
 STILL = np.array([0, 0])
 
 
+FRIGHT_TIME = 6
 class PacmanGameV2:
     def __init__(self, wall_count=5, pacmen=[], seed=None):
         if seed is None:
@@ -26,6 +27,7 @@ class PacmanGameV2:
         self.wall_count = wall_count
         self.score = 0
         self.lives = 3
+        self.frightened_timer = 0
         self.pacman_speed = 10
         self.ghost_speed = 8
         self.size = 3 * self.wall_count + 7
@@ -38,9 +40,14 @@ class PacmanGameV2:
                        np.array([3, self.size - 4]),
                        np.array([self.size - 4, self.size - 4]),
                        np.array([3, 3])]
+
+        self.GHOST_SPAWNS = [np.array([self.size - 4, 3]),
+                        np.array([3, self.size - 4]),
+                        np.array([self.size - 4, self.size - 4]),
+                        np.array([3, 3])]
         self.ghost_directions: List[np.ndarray] = [STILL, STILL, STILL, STILL]
         self.dots = np.zeros((self.size, self.size))
-        self.big_dots = []
+        self.big_dots:List[np.ndarray] = []
         self.wall_chance = 1.0
 
     def random_pacman_grid(self):
@@ -166,8 +173,8 @@ class PacmanGameV2:
                         min(col, col + direction[1]):max(col + 2, col + 2 + direction[1])] = 1
         self.walls[:, self.size - self.size // 2:] = np.fliplr(self.walls[:, :self.size // 2])
 
-    def get_done(self):
-        return any([(ghost == self.pacman).all() for ghost in self.ghosts])
+    def is_done(self):
+        return (self.frightened_timer <= 0 and any([(ghost == self.pacman).all() for ghost in self.ghosts])) or np.sum(self.dots) == 0
 
     def fill_dots(self):
         self.dots = np.zeros_like(self.walls) + self.walls < 1
@@ -208,9 +215,20 @@ class PacmanGameV2:
         next_pos = self.pacman + direction
         return self.walls[next_pos[0], next_pos[1]] != 1 # and not all(direction == -1 * self.pacman_direction)
 
-    def update(self):
+    def update(self, tick_per_sec):
         self.score += self.dots[self.pacman[0], self.pacman[1]]
         self.dots[self.pacman[0], self.pacman[1]] = 0
+        self.frightened_timer  = max(0, self.frightened_timer - 1)
+        for idx, ghost in enumerate(self.ghosts):
+            if all(ghost == self.pacman) and self.frightened_timer > 0:
+                self.score += 50
+                self.ghosts[idx] = self.GHOST_SPAWNS[idx]
+
+        for idx, dot in enumerate(self.big_dots):
+            if all(self.pacman == dot):
+                self.frightened_timer += FRIGHT_TIME * tick_per_sec
+                self.big_dots.pop(idx)
+                break
 
     def spawn_pacman(self, fresh=False):
         if fresh:

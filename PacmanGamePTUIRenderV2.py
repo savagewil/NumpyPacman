@@ -6,9 +6,6 @@ from PacmanGameV2 import PacmanGameV2
 
 import numpy as np
 
-from PacmanGame import PacmanGame
-from TileValues import TileValues
-
 WALL = 2
 UP = 3
 DOWN = 5
@@ -146,11 +143,12 @@ class PacmanGamePTUIRenderV2():
         for dot in self.game.big_dots:
             drawing[dot[0], dot[1]] = 19
 
-        for ghost in self.game.ghosts:
-            drawing[ghost[0], ghost[1]] = 17
+        if self.game.frightened_timer// 4 % 2 == 0:
+            for ghost in self.game.ghosts:
+                drawing[ghost[0], ghost[1]] = 17
 
         drawing[self.game.pacman[0], self.game.pacman[1]] = 13 + self.game.pacman_direction_num
-        Score_str = f"Score: {self.game.score} Lives:{ (self.game.lives - 1) *' ᗧ' }"
+        Score_str = f"Score: {self.game.score} Lives:{ (self.game.lives - 1) *' ᗧ' } Frightened: {self.game.frightened_timer}"
         return " " * (3*(self.game.size // 2) - (len(Score_str)//2)) + Score_str+ "\n".join(["".join([number_to_tile(v) for v in row])
                           for row in drawing]) + "\n"
 

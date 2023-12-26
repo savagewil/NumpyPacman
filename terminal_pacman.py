@@ -84,7 +84,7 @@ def main(window):
     tick_per_second = 25
     window.nodelay(True)
 
-    game = PacmanGameV2(9)
+    game = PacmanGameV2(13)
     renderer = PacmanGamePTUIRenderV2(game)
     pacman = PacmanController(game)
     ghosts = GhostController(game)
@@ -113,14 +113,14 @@ def main(window):
             # key = chr(key) if key != -1 else None
             if clock % (tick_per_second // game.pacman_speed) == 0:
                 pacman.step(c_key=saved_key)
-                if game.get_done():
+                if game.is_done():
                     break
 
             if clock % (tick_per_second // game.ghost_speed) == 0:
                 ghosts.step()
-                if game.get_done():
+                if game.is_done():
                     break
-            game.update()
+            game.update(tick_per_second)
 
             window.clear()
             window.addstr(0, 0, renderer.__str__())

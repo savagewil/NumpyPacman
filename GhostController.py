@@ -6,7 +6,6 @@ from PacmanGamePTUIRenderV2 import PacmanGamePTUIRenderV2
 from PacmanGameV2 import PacmanGameV2
 import os
 
-
 # def cls():
 #     print(20 * "\n")
 
@@ -34,11 +33,25 @@ class GhostController:
 
     def step(self):
         now = self.ghost_clock % (self.chase_time + self.scatter_time)
-        if now < self.chase_time:
-            self.chase()
+        if self.game.frightened_timer > 0:
+            self.frightened()
         else:
-            self.scatter()
-        self.ghost_clock += 1
+            if now < self.chase_time:
+                self.chase()
+            else:
+                self.scatter()
+            self.ghost_clock += 1
+
+    def get_target(self, index: int) -> np.ndarray:
+        if index == 0:
+            return self.game.pacman
+        elif index == 1:
+            return self.game.pacman + self.game.pacman_direction * 4
+        elif index == 2:
+            return self.game.pacman if np.linalg.norm(self.game.pacman - self.game.ghosts[2]) >= 8 else \
+                self.scatter_points[2]
+        elif index == 3:
+            return ((self.game.pacman + self.game.pacman_direction * 2) - self.game.ghosts[0]) * 2
 
     def scatter(self):
         pacman = self.game.pacman
@@ -55,20 +68,31 @@ class GhostController:
                         best_dir = direction
             self.game.move_ghost(ghost_idx, best_dir)
 
-    def chase(self):
+    def frightened(self):
         pacman = self.game.pacman
         for ghost_idx, ghost in enumerate(self.game.ghosts):
+            _directions = []
+            for direction in directions:
+                if self.game.valid_ghost_direction(ghost_idx, direction):
+                    _directions.append(direction)
+            if len(_directions) > 1:
+                self.game.move_ghost(ghost_idx, _directions[np.random.randint(0, len(_directions))])
+            elif len(_directions) == 1:
+                self.game.move_ghost(ghost_idx, _directions[0])
+
+    def chase(self):
+        for ghost_idx, ghost in enumerate(self.game.ghosts):
+            target = self.get_target(ghost_idx)
             best_dir = self.game.ghost_directions[ghost_idx]
             best_dist = self.game.size ** 2
             for direction in directions:
                 if self.game.valid_ghost_direction(ghost_idx, direction):
                     step = ghost + direction
-                    diff = np.linalg.norm(pacman - step)
+                    diff = np.linalg.norm(target - step)
                     if diff < best_dist:
                         best_dist = diff
                         best_dir = direction
             self.game.move_ghost(ghost_idx, best_dir)
-
 
 # if __name__ == '__main__':
 #     game = PacmanGameV2(7)

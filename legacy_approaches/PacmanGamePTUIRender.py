@@ -1,6 +1,6 @@
 import numpy as np
 
-from PacmanGame import PacmanGame
+from legacy_approaches.PacmanGame import PacmanGame
 from TileValues import TileValues
 
 WALL = 2

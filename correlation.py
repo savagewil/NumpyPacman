@@ -12,10 +12,10 @@ def correlate(base: object, kernel: object, expected: object=None) -> np.ndarray
     for i in range(1, base.shape[0]):
         transform_up[i - 1, i] = 1
 
-    filter_matrixes = [np.zeros((base.shape[1], base.shape[1])) for _ in range(kernel.shape[1])]
+    filter_matrices = [np.zeros((base.shape[1], base.shape[1])) for _ in range(kernel.shape[1])]
 
     correlation = np.zeros_like(base)
-    for idx, filter_matrix in enumerate(filter_matrixes):
+    for idx, filter_matrix in enumerate(filter_matrices):
         for i in range(base.shape[1]):
             filter_matrix[
             max(0, i - kernel.shape[0] // 2):min(base.shape[1], i + kernel.shape[0] - kernel.shape[0] // 2),

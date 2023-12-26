@@ -1,5 +1,5 @@
 import time
-from curses import wrapper
+import curses
 
 def main(stdscr):
     # Clear screen
@@ -14,4 +14,12 @@ def main(stdscr):
     stdscr.getkey()
 
 if __name__ == '__main__':
-    wrapper(main)
+    # screen = curses.initscr()
+    # wrapper(main)
+    import curses
+    import time
+
+    screen = curses.initscr()
+    screen.clear()
+
+    time.sleep(3)
